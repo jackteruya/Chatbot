@@ -1,21 +1,255 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Form</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatIndica | Melhores Ofertas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="lomadee" content="2324685" />
+    <style>
+        /* --- CSS --- */
+        :root {
+            --primary: #6366f1; /* Indigo */
+            --primary-hover: #4f46e5;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-secondary: #64748b;
+            --accent-green: #22c55e;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .logo span { color: var(--text-main); }
+
+        /* Search Bar */
+        .search-container { flex: 1; max-width: 400px; position: relative; }
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            outline: none;
+        }
+        .search-input:focus { border-color: var(--primary); }
+
+        /* Container Principal */
+        main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        
+        .section-title { margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; }
+
+        /* Grid de Produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Cartão do Produto */
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-green);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 200px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .image-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        .info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+
+        .category { font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.5rem; }
+        
+        .title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .prices { margin-top: auto; padding-top: 1rem; }
+        .old-price { font-size: 0.9rem; text-decoration: line-through; color: var(--text-secondary); }
+        .new-price { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+
+        .btn-buy {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .btn-buy:hover { background: var(--primary-hover); }
+
+        /* Footer */
+        footer { text-align: center; padding: 2rem; color: var(--text-secondary); margin-top: 3rem; font-size: 0.9rem; border-top: 1px solid #e2e8f0; }
+
+        /* Mensagem "Não encontrado" */
+        .no-results { grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 1.1rem; }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <h1>Simple Quiz</h1>
-    <div class="quiz">
-      <h2 id="question"></h2>
-      <div id="answer-buttons">
-      </div>
-      <button id="next-btn">Próximo</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>
+
+    <header>
+        <div class="logo">Chat<span>Indica</span></div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="O que você procura hoje?">
+        </div>
+    </header>
+
+    <main>
+        <h2 class="section-title">🔥 Ofertas em destaque</h2>
+        <div id="productsGrid" class="products-grid">
+            </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 ChatIndica. As melhores promoções da web.</p>
+    </footer>
+
+    <script>
+        /* --- JavaScript Moderno --- */
+        
+        // 1. Base de Dados (Simulada)
+        // Em um app real, isso viria de uma API ou Banco de Dados
+        const productsData = [
+            {
+                id: 1,
+                name: "Fone de Ouvido Bluetooth Pro Cancelamento Ruído",
+                category: "Eletrônicos",
+                oldPrice: 299.90,
+                price: 149.90,
+                image: "https://placehold.co/600x400/png?text=Fone+Bluetooth",
+                link: "#"
+            },
+            {
+                id: 2,
+                name: "Smartwatch Fitness Track V2 à Prova d'Água",
+                category: "Acessórios",
+                oldPrice: 450.00,
+                price: 199.99,
+                image: "https://placehold.co/600x400/png?text=Smartwatch",
+                link: "#"
+            },
+            {
+                id: 3,
+                name: "Kit Teclado e Mouse Gamer RGB Mecânico",
+                category: "Computadores",
+                oldPrice: 320.00,
+                price: 259.00,
+                image: "https://placehold.co/600x400/png?text=Kit+Gamer",
+                link: "#"
+            },
+            {
+                id: 4,
+                name: "Cafeteira Expresso Automática Inox",
+                category: "Casa",
+                oldPrice: 599.00,
+                price: 499.00,
+                image: "https://placehold.co/600x400/png?text=Cafeteira",
+                link: "#"
+            },
+            {
+                id: 5,
+                name: "Monitor LED 24 Polegadas Full HD",
+                category: "Monitores",
+                oldPrice: 899.00,
+                price: 649.90,
+                image: "https://placehold.co/600x400/png?text=Monitor+24",
+                link: "#"
+            },
+            {
+                id: 6,
+                name: "Mochila Impermeável para Notebook",
+                category: "Acessórios",
+                oldPrice: 150.00,
+                price: 89.90,
+                image: "https://placehold.co/600x400/png?text=Mochila",
+                link: "#"
+            }
+        ];
+
+        // 2. Elementos do DOM
+        const gridElement = document.getElementById('productsGrid');
+        const searchInput = document.getElementById('searchInput');
+
+        // 3. Formatador de Moeda (Intl API)
+        const formatMoney = (value) => {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        };
+
+        // 4. Função para calcular % de desconto
+        const calculateDiscount = (oldPrice, currentPrice) => {
+            if(!oldPrice) return 0;
+            const discount = ((oldPrice - currentPrice) / oldPrice) * 100;
+            return Math.round(discount);
+        };
+
+        // 5. Função de Renderização
+        const renderProducts = (products) => {
+            gridElement.innerHTML = ""; // Limpa o grid
+
+            if (products.length === 0) {
+                gridElement.innerHTML = `<div class="no-results">Nenhum produto encontrado 😢</div>`;
+                return;
+            }
+
+            products.forEach(product => {
+                const discount = calculateDiscount(product.oldPrice, product.price);
+                
+                // Criação do HTML usando Template Strings
+                const cardHTML = `
+                    <article class="product-card">
+                        ${discount > 0 ? `<div class="badge-discount">-${discount}%</div>` : ''}
+                        <div class="image-container">
+                            <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        </div>
